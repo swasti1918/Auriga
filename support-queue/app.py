@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 DB_NAME = "support_queue.db"
+TEAM_MEMBERS = ["Priya", "Arjun"]
 
 # -----------------------------
 # Database
@@ -103,15 +104,34 @@ def load_tickets():
 
 	return df
 
+def get_next_assignee():
+	conn = get_connection()
+
+	counts = dict.fromkeys(TEAM_MEMBERS, 0)
+	rows = conn.execute("""
+		SELECT assignee, COUNT(*)
+		FROM tickets
+		WHERE status != 'Resolved' AND assignee IS NOT NULL
+		GROUP BY assignee
+	""").fetchall()
+
+	conn.close()
+
+	for assignee, count in rows:
+		if assignee in counts:
+			counts[assignee] = count
+
+	return min(TEAM_MEMBERS, key=lambda assignee: counts[assignee])
+
 def add_ticket(
 	customer,
 	title,
 	description,
 	priority,
-	response_due,
-	assignee
+	response_due
 ):
 	conn = get_connection()
+	assignee = get_next_assignee()
 
 	conn.execute("""
 		INSERT INTO tickets
@@ -124,7 +144,7 @@ def add_ticket(
 		description,
 		priority,
 		response_due.isoformat(),
-		assignee if assignee != "Unassigned" else None,
+		assignee,
 		"Open",
 		datetime.now().isoformat()
 	))
@@ -234,14 +254,7 @@ with st.sidebar:
 		value=2
 	)
 
-	assignee = st.selectbox(
-		"Assign to",
-		[
-			"Unassigned",
-			"Priya",
-			"Arjun"
-		]
-	)
+	st.caption("New tickets are assigned automatically to the least-loaded team member.")
 
 	if st.button(
 		"Create Ticket",
@@ -261,8 +274,7 @@ with st.sidebar:
 				title,
 				description,
 				priority,
-				due,
-				assignee
+				due
 			)
 
 			st.success(

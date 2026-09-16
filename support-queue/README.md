@@ -24,6 +24,7 @@ The application automatically puts the most pressing ticket at the top.
 - Search
 - Filter
 - Assign
+- Automatically assign new tickets to the least-loaded team member
 - Update status
 - Detect overdue tickets
 - Track response deadlines

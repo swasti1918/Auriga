@@ -53,9 +53,9 @@ This reduces the need to manually scan a large queue.
 
 ## 6. Assignment
 
-A small helpdesk needs to know who is responsible for each ticket.
+A small helpdesk needs to know who is responsible for each ticket without requiring the customer or ticket creator to choose an owner.
 
-The application allows a ticket to be assigned to a team member and allows the assignment to be changed later.
+New tickets are automatically assigned to the least-loaded unresolved team member. The assignment can still be changed later by an operator when needed.
 
 ## 7. Persistence
 
