@@ -90,7 +90,23 @@ def init_db():
 
 		conn.commit()
 
+	escalate_overdue_tickets(conn)
 	conn.close()
+
+def escalate_overdue_tickets(conn):
+	now = datetime.now().isoformat()
+	conn.execute("""
+		UPDATE tickets
+		SET priority = CASE priority
+			WHEN 'Normal' THEN 'High'
+			WHEN 'High' THEN 'Urgent'
+			ELSE priority
+		END
+		WHERE response_due < ?
+		AND status != 'Resolved'
+		AND priority IN ('Normal', 'High')
+	""", (now,))
+	conn.commit()
 
 def load_tickets():
 	conn = get_connection()
@@ -189,7 +205,8 @@ def calculate_queue(df):
 	# Urgent gets higher priority than normal
 	df["priority_rank"] = df["priority"].map({
 		"Urgent": 0,
-		"Normal": 1
+		"High": 1,
+		"Normal": 2
 	})
 
 	# Overdue tickets are always surfaced first.
@@ -244,7 +261,7 @@ with st.sidebar:
 
 	priority = st.selectbox(
 		"Priority",
-		["Urgent", "Normal"]
+		["Urgent", "High", "Normal"]
 	)
 
 	response_hours = st.number_input(

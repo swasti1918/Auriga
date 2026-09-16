@@ -12,9 +12,10 @@ I used the following ordering:
 
 1. Overdue unresolved tickets
 2. Urgent tickets
-3. Normal tickets
-4. Earlier response deadlines
-5. Earlier creation time as a tie-breaker
+3. High tickets
+4. Normal tickets
+5. Earlier response deadlines
+6. Earlier creation time as a tie-breaker
 
 This provides a predictable ordering and prevents the helpdesk team from having to manually scan the entire ticket list.
 
@@ -27,6 +28,10 @@ The application therefore calculates whether:
 ```text
 response_due < current_time
 ```
+
+## 4. Automatic Escalation
+
+At application startup, every overdue unresolved ticket is escalated by exactly one priority level: Normal becomes High, and High becomes Urgent. Urgent tickets remain Urgent. This check runs once per application run, so a ticket cannot jump more than one level during a single run.
 
 ## 4. Why Priority Is Separate From Deadline
 

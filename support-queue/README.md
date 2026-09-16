@@ -14,9 +14,10 @@ The application automatically puts the most pressing ticket at the top.
 
 1. Overdue unresolved tickets
 2. Urgent tickets
-3. Normal tickets
-4. Earlier response deadline
-5. Earlier creation time
+3. High tickets
+4. Normal tickets
+5. Earlier response deadline
+6. Earlier creation time
 
 ## Features
 
@@ -27,6 +28,7 @@ The application automatically puts the most pressing ticket at the top.
 - Automatically assign new tickets to the least-loaded team member
 - Update status
 - Detect overdue tickets
+- Automatically escalate overdue tickets one priority level per run
 - Track response deadlines
 - Persistent SQLite storage
 
