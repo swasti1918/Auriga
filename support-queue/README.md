@@ -10,6 +10,10 @@ The helpdesk has many tickets with different priorities and response deadlines.
 
 The application automatically puts the most pressing ticket at the top.
 
+## Screenshot
+
+![Support Queue application](screenshots/support-queue.png)
+
 ## Queue Rule
 
 1. Overdue unresolved tickets
