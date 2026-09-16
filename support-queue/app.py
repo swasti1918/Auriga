@@ -521,6 +521,11 @@ else:
 					f"{deadline_text}"
 				)
 
+				st.markdown(
+					f"**Due by:** "
+					f"{due.strftime('%d %b %Y %H:%M')}"
+				)
+
 				display_assignee = (
 					"Unassigned"
 					if pd.isna(ticket["assignee"])
